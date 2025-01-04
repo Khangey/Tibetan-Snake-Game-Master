@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="bo">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>སྦྲུལ་ཧམ་པ་ཅན།</title>
+    <style>
+        @font-face {
+            font-family: 'Qomolangma-Uchen Sarchung';
+            src: url('fonts/Qomolangma-Uchen Sarchung.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        * {
+            font-family: 'Qomolangma-Uchen Sarchung', sans-serif;
+        }
+
+        /* 添加字体加载检测 */
+        .fonts-loaded {
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        /* 在字体加载前隐藏内容 */
+        body {
+            opacity: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #FFFFFF;
+            margin: 0;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+            color: #333333;
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 40px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .left-section {
+            flex: 1;
+            max-width: 400px;
+            padding-bottom: 20px;
+        }
+
+        .game-container {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .site-title {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: #DB4437;
+            text-align: center;
+            width: 100%;
+        }
+
+        .game-description {
+            background-color: #4285F4;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(66, 133, 244, 0.2);
+            color: white;
+        }
+
+        .footer {
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #4285F4;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 -5px 15px rgba(139, 133, 137, 0.1);
+            color: white;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+        }
+
+        #gameCanvas {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            aspect-ratio: 1;
+            border: 2px solid #4285F4;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(139, 133, 137, 0.2);
+            background-color: #FFFFFF;
+        }
+
+        .controls-container {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .instructions {
+            text-align: center;
+            padding: 15px;
+            background-color: #D8D3D6;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(139, 133, 137, 0.15);
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .direction-keys {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            font-size: 12px;
+            color: white;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .direction-keys span {
+            white-space: nowrap;
+        }
+
+        .game-tips {
+            font-size: 14px;
+            color: white;
+            text-align: center;
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+
+        .game-tips p {
+            margin: 5px 0;
+            opacity: 0.9;
+        }
+
+        .score {
+            font-size: 28px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 6px rgba(15, 157, 88, 0.2);
+            text-align: center;
+            transition: background-color 0.3s ease;
+            background-color: #0F9D58;
+            color: white;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 20px;
+            cursor: pointer;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(244, 180, 0, 0.2);
+            transition: all 0.3s ease;
+            background-color: #F4B400;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(139, 133, 137, 0.3);
+            background-color: #F5BC1F;
+        }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(139, 133, 137, 0.2);
+            background-color: #E5A800;
+        }
+
+        @media (max-width: 1024px) {
+            .main-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .left-section {
+                max-width: 800px;
+                width: 100%;
+                padding-bottom: 0;
+                margin-bottom: 20px;
+            }
+
+            .game-container {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .controls {
+                font-size: 16px;
+                flex-wrap: wrap;
+            }
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .touch-controls {
+            display: none;  /* 默认隐藏，在移动设备上显示 */
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 150px;
+        }
+
+        .touch-button {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(66, 133, 244, 0.3);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            color: #4285F4;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .touch-up {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .touch-down {
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .touch-left {
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .touch-right {
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        @media (max-width: 1024px) {
+            .touch-controls {
+                display: block;
+            }
+
+            .game-container {
+                position: relative;
+                padding-bottom: 170px;  /* 为触摸控制留出空间 */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="left-section">
+            <h1 class="site-title">Classic Snake</h1>
+            <h1 class="site-title">སྦྲུལ་ཧམ་པ་ཅན།</h1>
+            <div class="game-description">
+                <div class="controls">
+                    <div class="game-tips">
+                        <p>སྦྲུལ་གྱིས་ཟས་བཟའ་ན་རིང་དུ་འགྲོ། རང་གི་གཟུགས་པོའམ་རྩིག་པར་ཐུག་ན་རྩེད་མོ་རྫོགས། ཟས་རེ་བཟས་པར་ཐོབ་སྐར་བཅུ་རེ་ཐོབ།</p>
+                    </div>
+                    <div class="direction-keys">
+                        <span>⬆️ ཡར་འགྲོ།</span>
+                        <span>⬇️ མར་འགྲོ།</span>
+                        <span>⬅️ གཡོན་དུ་འགྲོ།</span>
+                        <span>➡️ གཡས་སུ་འགྲོ།</span>
+                    </div>
+                </div>
+            </div>
+            <div class="score">ཐོབ་སྐར། <span id="scoreValue">0</span></div>
+            <div class="button-container">
+                <button onclick="restartGame()">འགོ་འཛུགས།</button>
+            </div>
+        </div>
+
+        <div class="game-container">
+            <canvas id="gameCanvas" width="800" height="800"></canvas>
+            <div class="touch-controls">
+                <div class="touch-button touch-up">⬆️</div>
+                <div class="touch-button touch-down">⬇️</div>
+                <div class="touch-button touch-left">⬅️</div>
+                <div class="touch-button touch-right">➡️</div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <p>བོད་དྲ2023000237-ཨང་10བ།</p>
+            </div>
+            <div class="footer-section">
+                <p>བཟོ་མཁན། ཁྱུང་བོ་གངས་རྒྱན།</p>
+            </div>
+            <div class="footer-section">
+                <p>©བོད་ལྗོངས་དཔལ་ཡོན་ཆ་འཕྲིན་ཚད་ཡོད་ཀུང་སི་ནས་བཟོས།</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 字体加载检测
+        document.fonts.ready.then(() => {
+            document.body.classList.add('fonts-loaded');
+        });
+
+        // 确保字体加载超时处理
+        setTimeout(() => {
+            document.body.classList.add('fonts-loaded');
+        }, 1000);
+    </script>
+    <script src="script.js"></script>
+</body>
+</html> 
